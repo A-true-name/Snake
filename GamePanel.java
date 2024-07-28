@@ -11,10 +11,14 @@ import java.awt.Frame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-import javax.swing.JPanel;
 
-public class GamePanel {
+
+
+abstract class GamePanel extends JPanel implements ActionListener{
     public static void main(String s[]) {  
     JFrame frame = new JFrame(); //Makes the frame.
         JPanel panel = new JPanel();  
