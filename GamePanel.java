@@ -7,10 +7,10 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener {
     
-    static final int WIDTH = 500;
-    static final int HEIGHT = 500;
-    static final int UNIT_SIZE = 20;
-    static final int NUMBER_OF_UNITS = (WIDTH * HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
+    static final int WIDTH = 500; //Window size.
+    static final int HEIGHT = 500; //Window size.
+    static final int CELL_SIZE = 20;
+    static final int NUMBER_OF_UNITS = (WIDTH * HEIGHT) / (CELL_SIZE * CELL_SIZE);
 
     // hold x and y coordinates for body parts of the snake.
     final int x[] = new int[NUMBER_OF_UNITS];
@@ -22,6 +22,13 @@ public class GamePanel extends JPanel implements ActionListener {
     int foodX;
     int foodY;
     
+  
+
+    char direction = 'D';
+    boolean running = false;
+    Random random;
+    Timer timer;//Runs things such as game speed
+    
    
     public GamePanel() {
         // Initialize components or start game logic
@@ -31,6 +38,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {//To fix public class GamePanel extends JPanel implements ActionListener {  not being abstract error.
         
     }
+    
 
     // Other methods related to game logic can be added here
 
@@ -42,4 +50,7 @@ public class GamePanel extends JPanel implements ActionListener {
         frame.setSize(WIDTH, HEIGHT);
         frame.setVisible(true);
     }
-}
+            public void newFood() {
+            foodX = random.nextInt((int) (WIDTH / CELL_SIZE)) * CELL_SIZE;
+            foodY = random.nextInt((int) (HEIGHT / CELL_SIZE)) * CELL_SIZE;
+}}
