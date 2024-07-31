@@ -1,5 +1,9 @@
 #BlueJ class context
 comment0.target=GamePanel
-comment1.params=s
-comment1.target=void\ main(java.lang.String[])
-numComments=2
+comment1.params=
+comment1.target=GamePanel()
+comment2.params=e
+comment2.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment3.params=args
+comment3.target=void\ main(java.lang.String[])
+numComments=4
