@@ -1,4 +1,4 @@
-    
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,7 +13,7 @@ public class SnakeGame extends JFrame {
         JFrame frame = new JFrame();
         GamePanel gamePanel = new GamePanel();
         frame.add(gamePanel);
-        //frame.setSize(WIDTH, HEIGHT); //setś window size
+        frame.setSize(WIDTH, HEIGHT); //setś window size
         frame.setVisible(true);
     }
 
@@ -23,8 +23,8 @@ public class SnakeGame extends JFrame {
 
     public class GamePanel extends JPanel implements ActionListener {
 
-        //static final int WIDTH = 500; //Window size.
-        //static final int HEIGHT = 500; //Window size.
+        static final int WIDTH = 1000; //Window size.
+        static final int HEIGHT = 1000; //Window size.
         static final int CELL_SIZE = 40;
         static final int NUMBER_OF_UNITS = (WIDTH * HEIGHT) / (CELL_SIZE * CELL_SIZE);
 
@@ -39,7 +39,7 @@ public class SnakeGame extends JFrame {
         int foodEaten;
         int foodX;
         int foodY;
-        private char direction = 'R';
+        char direction = 'R';
 
         //char direction = 'D';
         boolean running = false;
@@ -52,7 +52,16 @@ public class SnakeGame extends JFrame {
             this.setBackground(Color.black);
             this.setFocusable(true);
             this.addKeyListener(new MyKeyAdapter());
-            setLayout(null);  // use absolute positioning
+
+            startGame(); 
+
+        }
+
+        public void startGame() {
+            //newFood();
+            running = true;
+            timer = new Timer(75, this);
+            timer.start();
         }
 
         @Override
@@ -64,6 +73,7 @@ public class SnakeGame extends JFrame {
         public void draw(Graphics g) {
             if (running) {
                 g.setColor(Color.red);
+                g.fillOval(foodX, foodY, CELL_SIZE, CELL_SIZE); //Paint food
 
                 for (int i = 0; i < bodyParts; i++) {
                     if (i == 0) {
@@ -74,15 +84,23 @@ public class SnakeGame extends JFrame {
                         g.fillRect(x[i], y[i], CELL_SIZE, CELL_SIZE);
                     }
                 }
+
+                g.setColor(Color.red);
+                g.setFont(new Font("Ink Free", Font.BOLD, 40));
+                FontMetrics metrics = getFontMetrics(g.getFont());
+                //g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, g.getFont().getSize());
+            } else {
+                //gameOver(g);
             }
         }
+
         public void move() {
             for (int i = bodyParts; i > 0; i--) {
                 x[i] = x[i - 1];
                 y[i] = y[i - 1];
             }
 
-            switch (direction) {
+            switch (direction) { 
                 case 'U':
                     y[0] = y[0] - CELL_SIZE;
                     break;
@@ -98,17 +116,26 @@ public class SnakeGame extends JFrame {
             }
         }
 
-        
-
         public void newFood() {//Spawns food randomely within the playing area in only spawning on the rigded lines that the snake can travel on.
             foodX = random.nextInt((int) (WIDTH / CELL_SIZE)) * CELL_SIZE;
             foodY = random.nextInt((int) (HEIGHT / CELL_SIZE)) * CELL_SIZE;
 
         }
-        
-         public class MyKeyAdapter extends KeyAdapter {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (running) {
+                
+                move();
+                // checkFood();
+                // checkCollisions();
+            }
+            repaint();              
+        }
+        public class MyKeyAdapter extends KeyAdapter {
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(KeyEvent e) {// Fixes  public class GamePanel extends JPanel implements ActionListener { having to be abstract.
+                // Prevents you from going back on your self.
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
                         if (direction != 'R') {
@@ -132,18 +159,7 @@ public class SnakeGame extends JFrame {
                         break;
                 }
             }
-       }
-
-       
-       @Override
-        public void actionPerformed(ActionEvent e) {
-            if (running) {
-                // Game logic here
-                move();
-                // checkFood();
-                // checkCollisions();
-            }
-                repaint();
         }
     }
+
 }

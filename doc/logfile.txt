@@ -1,0 +1,35 @@
+Class documentation
+<---- javadoc command: ---->
+C:\Program Files\jdk\bin\javadoc.exe
+-author
+-version
+-nodeprecated
+-package
+-Xdoclint:none
+-noindex
+-notree
+-nohelp
+-nonavbar
+-source
+17
+-classpath
+C:\Program Files\lib\bluejcore.jar;C:\Program Files\lib\javafx-base-20.0.1-win.jar;C:\Program Files\lib\javafx-base-20.0.1.jar;C:\Program Files\lib\javafx-controls-20.0.1-win.jar;C:\Program Files\lib\javafx-controls-20.0.1.jar;C:\Program Files\lib\javafx-fxml-20.0.1-win.jar;C:\Program Files\lib\javafx-fxml-20.0.1.jar;C:\Program Files\lib\javafx-graphics-20.0.1-win.jar;C:\Program Files\lib\javafx-graphics-20.0.1.jar;C:\Program Files\lib\javafx-media-20.0.1-win.jar;C:\Program Files\lib\javafx-media-20.0.1.jar;C:\Program Files\lib\javafx-swing-20.0.1-win.jar;C:\Program Files\lib\javafx-web-20.0.1-win.jar;C:\Program Files\lib\junit-4.12.jar;C:\Program Files\lib\junit-jupiter-5.5.2.jar;C:\Program Files\lib\junit-jupiter-api-5.5.2.jar;C:\Program Files\lib\junit-jupiter-engine-5.5.2.jar;C:\Program Files\lib\junit-jupiter-params-5.5.2.jar;C:\Program Files\lib\junit-platform-commons-1.5.2.jar;C:\Program Files\lib\junit-platform-engine-1.5.2.jar;C:\Program Files\lib\junit-platform-launcher-1.5.2.jar;C:\Program Files\lib\junit-platform-suite-api-1.5.2.jar;C:\Program Files\lib\junit-vintage-engine-5.5.2.jar;C:\Program Files\lib\hamcrest-core-1.3.jar;C:\Program Files\lib\opentest4j-1.2.0.jar;C:\Program Files\lib\lang-stride.jar;C:\Program Files\lib\javafx\javafx.base.jar;C:\Program Files\lib\javafx\javafx.controls.jar;C:\Program Files\lib\javafx\javafx.fxml.jar;C:\Program Files\lib\javafx\javafx.graphics.jar;C:\Program Files\lib\javafx\javafx.media.jar;C:\Program Files\lib\javafx\javafx.properties.jar;C:\Program Files\lib\javafx\javafx.swing.jar;C:\Program Files\lib\javafx\javafx.web.jar;D:\Snake game\Snake game
+-d
+D:\Snake game\Snake game\doc
+-encoding
+UTF-8
+-charset
+UTF-8
+D:\Snake game\Snake game\SnakeGame.java
+<---- end of javadoc command ---->
+Loading source file D:\Snake game\Snake game\SnakeGame.java...
+Constructing Javadoc information...
+Standard Doclet version 17.0.4.1+1
+Building tree for all the packages and classes...
+Generating D:\Snake game\Snake game\doc\SnakeGame.html...
+Generating D:\Snake game\Snake game\doc\SnakeGame.GamePanel.html...
+Generating D:\Snake game\Snake game\doc\SnakeGame.GamePanel.MyKeyAdapter.html...
+Generating D:\Snake game\Snake game\doc\package-summary.html...
+Generating D:\Snake game\Snake game\doc\constant-values.html...
+Generating D:\Snake game\Snake game\doc\serialized-form.html...
+Generating D:\Snake game\Snake game\doc\index.html...
