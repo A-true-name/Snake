@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,6 +12,7 @@ public class SnakeGame extends JFrame {
         JFrame frame = new JFrame();
         GamePanel gamePanel = new GamePanel();
         frame.add(gamePanel);
+        this.setBackground(Color.black);
         frame.setSize(WIDTH, HEIGHT); //setś window size
         frame.setVisible(true);
     }
@@ -25,7 +25,7 @@ public class SnakeGame extends JFrame {
 
         static final int WIDTH = 1000; //Window size.
         static final int HEIGHT = 1000; //Window size.
-        static final int CELL_SIZE = 40;
+        static final int CELL_SIZE = 40; // Size of a square inside the game.
         static final int NUMBER_OF_UNITS = (WIDTH * HEIGHT) / (CELL_SIZE * CELL_SIZE);
 
         // hold x and y coordinates for body parts of the snake.
@@ -34,33 +34,34 @@ public class SnakeGame extends JFrame {
 
         private int bodyParts = 6;//Starting length of snake.
 
-        // initial length of the snake and food dimensions.
+        //  food dimensions.
         int length = 10;
         int foodEaten;
-        int foodX;
-        int foodY;
+        int foodX;//Horizontal.(Up)
+        int foodY;//Vertical.(Side to side)
         char direction = 'R';
 
         //char direction = 'D';
-        boolean running = false;
-        Random random;
+        boolean running = false; 
+        Random random; // Randomizer such as having food spawn in random places.
         Timer timer;//Runs things such as game speed
 
         public GamePanel() {
             random = new Random();
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-            this.setBackground(Color.black);
-            this.setFocusable(true);
+            //this.setBackground(Color.black);
+            this.setFocusable(true); //Allows for GamePanel for keyboard inouts.
             this.addKeyListener(new MyKeyAdapter());
 
             startGame(); 
 
         }
 
+
         public void startGame() {
-            //newFood();
-            running = true;
-            timer = new Timer(75, this);
+            newFood();
+            running = true;//Runs the game when true
+            timer = new Timer(75, this);// Speed of the game.
             timer.start();
         }
 
@@ -88,13 +89,13 @@ public class SnakeGame extends JFrame {
                 g.setColor(Color.red);
                 g.setFont(new Font("Ink Free", Font.BOLD, 40));
                 FontMetrics metrics = getFontMetrics(g.getFont());
-                //g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, g.getFont().getSize());
+                g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, g.getFont().getSize());
             } else {
                 //gameOver(g);
             }
         }
 
-        public void move() {
+        public void move() {// Makes the segment of the snake follow the segment infront of it untill it reaches the head which you controll.
             for (int i = bodyParts; i > 0; i--) {
                 x[i] = x[i - 1];
                 y[i] = y[i - 1];
@@ -115,6 +116,42 @@ public class SnakeGame extends JFrame {
                     break;
             }
         }
+        
+        public void Collisions() {
+            System.out.println(" Collision" );
+            for (int i = bodyParts; i > 0; i--) {
+                if ((x[0] == x[i]) && (y[0] == y[i])) {
+                    running = false;
+                    System.out.println(" Collision" );
+                }
+            }
+
+            if (x[0] < 0) {
+                running = false;
+                System.out.println(" Collision" );
+            }
+
+            if (x[0] > WIDTH) {
+                running = false;
+                System.out.println(" Collision" );
+            }
+
+            if (y[0] < 0) {
+                running = false;
+                System.out.println(" Collision" );
+              
+            }
+
+            if (y[0] > HEIGHT) {
+                running = false;
+              System.out.println(" Collision" );
+            }
+
+            if (!running) {
+                timer.stop();
+                System.out.println(" Collision" );
+            }
+        }
 
         public void newFood() {//Spawns food randomely within the playing area in only spawning on the rigded lines that the snake can travel on.
             foodX = random.nextInt((int) (WIDTH / CELL_SIZE)) * CELL_SIZE;
@@ -123,19 +160,20 @@ public class SnakeGame extends JFrame {
         }
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {// Fixes  public class GamePanel extends JPanel implements ActionListener { having to be abstract.
             if (running) {
-                
+                Collisions();
+
                 move();
-                // checkFood();
-                // checkCollisions();
+                
+                
             }
-            repaint();              
+            repaint();//Constantly updates the game              
         }
         public class MyKeyAdapter extends KeyAdapter {
             @Override
-            public void keyPressed(KeyEvent e) {// Fixes  public class GamePanel extends JPanel implements ActionListener { having to be abstract.
-                // Prevents you from going back on your self.
+            public void keyPressed(KeyEvent e) {
+                // Allows you to change the direction of the snake but prevents you from turning directly back on yourself. 
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
                         if (direction != 'R') {
