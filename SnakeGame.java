@@ -12,7 +12,7 @@ public class SnakeGame extends JFrame {
         JFrame frame = new JFrame();
         GamePanel gamePanel = new GamePanel();
         frame.add(gamePanel);
-        this.setBackground(Color.black);
+        
         frame.setSize(WIDTH, HEIGHT); //setś window size
         frame.setVisible(true);
     }
@@ -40,6 +40,7 @@ public class SnakeGame extends JFrame {
         int foodX;//Horizontal.(Up)
         int foodY;//Vertical.(Side to side)
         char direction = 'R';
+        int movespeed = 120 ;
 
         //char direction = 'D';
         boolean running = false; 
@@ -49,7 +50,7 @@ public class SnakeGame extends JFrame {
         public GamePanel() {
             random = new Random();
             this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-            //this.setBackground(Color.black);
+            this.setBackground(Color.black);
             this.setFocusable(true); //Allows for GamePanel for keyboard inouts.
             this.addKeyListener(new MyKeyAdapter());
 
@@ -61,7 +62,7 @@ public class SnakeGame extends JFrame {
         public void startGame() {
             newFood();
             running = true;//Runs the game when true
-            timer = new Timer(75, this);// Speed of the game.
+            timer = new Timer(movespeed, this);// Speed of the game.
             timer.start();
         }
 
@@ -89,7 +90,7 @@ public class SnakeGame extends JFrame {
                 g.setColor(Color.red);
                 g.setFont(new Font("Ink Free", Font.BOLD, 40));
                 FontMetrics metrics = getFontMetrics(g.getFont());
-                g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, g.getFont().getSize());
+                g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, g.getFont().getSize()); //Draws the score.
             } else {
                 //gameOver(g);
             }
@@ -117,34 +118,41 @@ public class SnakeGame extends JFrame {
             }
         }
         
+        public void Food() {
+            if ((x[0] == foodX) && (y[0] == foodY)) {
+                bodyParts++;
+                foodEaten++;
+                newFood();
+            }
+        }
+        
         public void Collisions() {
-            System.out.println(" Collision" );
             for (int i = bodyParts; i > 0; i--) {
-                if ((x[0] == x[i]) && (y[0] == y[i])) {
+                if ((x[0] == x[i]) && (y[0] == y[i])) {//If you hit a body part of the snake it triggers the collision method
                     running = false;
-                    System.out.println(" Collision" );
+                    //System.out.println(" Collision" );
                 }
             }
 
-            if (x[0] < 0) {
+            if (x[0] < 0) { 
                 running = false;
-                System.out.println(" Collision" );
+                //System.out.println(" Collision" );
             }
 
             if (x[0] > WIDTH) {
                 running = false;
-                System.out.println(" Collision" );
+                //System.out.println(" Collision" );
             }
 
             if (y[0] < 0) {
                 running = false;
-                System.out.println(" Collision" );
+                //System.out.println(" Collision" );
               
             }
 
             if (y[0] > HEIGHT) {
-                running = false;
-              System.out.println(" Collision" );
+                //running = false;
+              //System.out.println(" Collision" );
             }
 
             if (!running) {
@@ -162,10 +170,11 @@ public class SnakeGame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {// Fixes  public class GamePanel extends JPanel implements ActionListener { having to be abstract.
             if (running) {
-                Collisions();
-
-                move();
                 
+                
+                Food();
+                move();
+                Collisions();
                 
             }
             repaint();//Constantly updates the game              
