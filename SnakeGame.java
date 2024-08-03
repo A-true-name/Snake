@@ -120,7 +120,7 @@ public class SnakeGame extends JFrame {
 
         public void draw(Graphics g) {
             if (running) {
-                g.setColor(Color.red); //Setś food colour
+                g.setColor(Color.orange); //Setś food colour
                 g.fillOval(foodX, foodY, CELL_SIZE, CELL_SIZE); //Paint food
 
                 for (int i = 0; i < bodyParts; i++) {// The entire snake
@@ -147,11 +147,11 @@ public class SnakeGame extends JFrame {
             g.setColor(Color.white);
             g.setFont(new Font("Comic Sans", Font.BOLD, 75));
             FontMetrics metrics = getFontMetrics(g.getFont());
-            g.drawString("Game Over", (WIDTH - metrics.stringWidth("Game Over")) / 2, HEIGHT / 2);
+            g.drawString("Game Over", (WIDTH - metrics.stringWidth("Game Over")) / 2, HEIGHT / 2); //Draws the game over screen when you collide with edge or snake body.
 
             g.setColor(Color.white); //Sets score colour
-            g.setFont(new Font("Comic Sans", Font.BOLD, 40)); //Cool Font.
-            metrics = getFontMetrics(g.getFont()); //Cool Font.
+            g.setFont(new Font("Comic Sans", Font.BOLD, 40)); //Gets font
+            metrics = getFontMetrics(g.getFont()); 
             g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, HEIGHT / 2 + g.getFont().getSize());//Draws the score and counts up when food eaten.
 
             restartButton.setVisible(true);  // show the restart button
@@ -216,7 +216,7 @@ public class SnakeGame extends JFrame {
             }
             if (!running) {
                 timer.stop();
-                //System.out.println(" Collision" );
+            
             }
         }
 
@@ -229,12 +229,8 @@ public class SnakeGame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {// Fixes  public class GamePanel extends JPanel implements ActionListener { having to be abstract.
             if (running) {
-                
-
                 move();
-
                 Food();
-
                 Collisions();
 
             }
@@ -243,10 +239,6 @@ public class SnakeGame extends JFrame {
         public class MyKeyAdapter extends KeyAdapter {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (!started) {
-                    started = true;
-                    startGame();//Starts game when movement is triggered
-                }
                 // Allows you to change the direction of the snake but prevents you from turning directly back on yourself. 
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
@@ -271,7 +263,11 @@ public class SnakeGame extends JFrame {
                         break;
                 }
             }
+        
         }
     }
 
 }
+
+
+
