@@ -7,14 +7,47 @@ import javax.swing.JPanel;
 
 public class SnakeGame extends JFrame {
     static final int WIDTH = 1016; //Window size.
-    static final int HEIGHT = 1036; //Window size.
-    public SnakeGame(){
-        JFrame frame = new JFrame();
-        GamePanel gamePanel = new GamePanel();
-        frame.add(gamePanel);
+    static final int HEIGHT = 1022; //Window size.
 
-        frame.setSize(WIDTH, HEIGHT); //setś window size
-        frame.setVisible(true);
+    private GamePanel gamePanel;
+    private JButton startButton;
+
+    public SnakeGame() {
+        setTitle("Snake Game");
+        setSize(WIDTH, HEIGHT); // set window size
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        gamePanel = new GamePanel();
+        add(gamePanel);
+
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu instructionsMenu = new JMenu("Instructions");
+        menuBar.add(instructionsMenu);
+
+        JMenuItem Instructions = new JMenuItem("Instructions");
+        Instructions.addActionListener(e -> JOptionPane.showMessageDialog(this,
+                    "Use arrow or wasd keys to move the snake.\n" +
+                    "Eat food to grow and gain score.\n" +
+                    "Avoid colliding with the walls and the snake's own body.\n" +
+                    "Press 'P' to pause the game and 'R' to resume.",
+                    "Instructions",
+                    JOptionPane.INFORMATION_MESSAGE));
+        instructionsMenu.add(Instructions);
+
+
+        startButton = new JButton("Start Game");
+        startButton.setBounds(WIDTH / 2 - 75, HEIGHT / 2 - 15, 150, 30);
+        startButton.setFocusable(false);
+        startButton.addActionListener(e -> {
+                    gamePanel.startGame();
+                    startButton.setVisible(false);
+            });
+        gamePanel.setLayout(null);
+        gamePanel.add(startButton);
+
+        setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -24,7 +57,7 @@ public class SnakeGame extends JFrame {
     public class GamePanel extends JPanel implements ActionListener {
 
         static final int WIDTH = 1000;  // Used for every part of the code that needs WIDTH apart from the initial window.
-        static final int HEIGHT = 1000; // Used for every part of the code that needs HEIGHT apart from the initial window.
+        static final int HEIGHT = 960; // Used for every part of the code that needs HEIGHT apart from the initial window.
         static final int CELL_SIZE = 40; // Size of a square inside the game.
         static final int NUMBER_OF_UNITS = (WIDTH * HEIGHT) / (CELL_SIZE * CELL_SIZE);
 
@@ -36,14 +69,13 @@ public class SnakeGame extends JFrame {
 
         //  food dimensions.
         int length = 10;
-        int foodEaten;
+        int Score;
         int foodX;//Horizontal.(Up)
         int foodY;//Vertical.(Side to side)
         char direction = 'R'; //Starts the snake moving right.
         int movespeed = 120 ;//Move speed of the snake.
-        
+
         boolean startgame = false;
-    
 
         //char direction = 'D';
         boolean started = false; // To track if the game has started with the first move
@@ -60,7 +92,7 @@ public class SnakeGame extends JFrame {
             this.addKeyListener(new MyKeyAdapter());
 
             restartButton = new JButton("Restart");
-            restartButton.setBounds(WIDTH / 2 - 50, HEIGHT / 2 + 50, 100, 30);  // position the button
+            restartButton.setBounds(WIDTH / 2 - 50, HEIGHT / 2 + 50, 100, 30);  // position of the button.
             restartButton.setFocusable(false);
             restartButton.addActionListener(new ActionListener() {
                     @Override
@@ -73,8 +105,7 @@ public class SnakeGame extends JFrame {
 
             StartingsnakePosition();
 
-            startGame(); 
-
+            //startGame(); //Starts game when window is opened.
         }
 
         public void StartingsnakePosition() {
@@ -88,21 +119,24 @@ public class SnakeGame extends JFrame {
         }
 
         public void startGame() {
+            restartButton.setVisible(false);
             newFood();
+            //bodyParts = 3;
             running = true;//Runs the game when true
-            timer = new Timer(movespeed, this);// Speed of the game.
+            timer = new Timer(movespeed, this);// Speed of th9e game.
             timer.start();
+            repaint();
+            started = true;
+
         }
 
         public void restartGame() {// Sets all the values to the default value
             bodyParts = 3; 
-            foodEaten = 0;
+            Score = 0;
             direction = 'R';
             running = true;
-            started = false;
+            started = true;
             StartingsnakePosition();
-            //x[0] = 0; //Would respawn snake at 0 0 but not needed anymore.
-            //y[0] = 0;
             newFood();
             restartButton.setVisible(false);
             if (timer != null) {
@@ -136,14 +170,18 @@ public class SnakeGame extends JFrame {
                 g.setColor(Color.white);
                 g.setFont(new Font("Comic Sans", Font.BOLD, 40));
                 FontMetrics metrics = getFontMetrics(g.getFont());
-                g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, g.getFont().getSize()); //Draws the score.
+                g.drawString("Score: " + Score, (WIDTH - metrics.stringWidth("Score: " + Score)) / 2, g.getFont().getSize()); //Draws the score.
             } else {
-                gameOver(g);// Triggered when collisons happen to stop game.
+                if (started == true) { //Once game has been started gameover screen is available.
+
+                    gameOver(g);}
+
             }
         }
 
         public void gameOver(Graphics g) {
-            
+            running = false;
+
             g.setColor(Color.white);
             g.setFont(new Font("Comic Sans", Font.BOLD, 75));
             FontMetrics metrics = getFontMetrics(g.getFont());
@@ -152,9 +190,26 @@ public class SnakeGame extends JFrame {
             g.setColor(Color.white); //Sets score colour
             g.setFont(new Font("Comic Sans", Font.BOLD, 40)); //Gets font
             metrics = getFontMetrics(g.getFont()); 
-            g.drawString("Score: " + foodEaten, (WIDTH - metrics.stringWidth("Score: " + foodEaten)) / 2, HEIGHT / 2 + g.getFont().getSize());//Draws the score and counts up when food eaten.
+            g.drawString("Score: " + Score, (WIDTH - metrics.stringWidth("Score: " + Score)) / 2, HEIGHT / 2 + g.getFont().getSize());//Draws the score and counts up when food eaten.
+
+            bodyParts = 3; 
+            StartingsnakePosition();
 
             restartButton.setVisible(true);  // show the restart button
+        }
+
+        public void pauseGame() {
+            running = false;
+            if (timer != null) {
+                timer.stop();
+            }
+        }
+
+        public void resumeGame() {
+            running = true;
+            if (timer != null) {
+                timer.start();
+            }
         }
 
         public void move() {// Makes the segment of the snake follow the segment infront of it untill it reaches the head which you controll.
@@ -163,27 +218,27 @@ public class SnakeGame extends JFrame {
                 y[i] = y[i - 1];
             }
 
-            switch (direction) { 
+            switch (direction) { //Moves in a grid.
                 case 'U':
-                    y[0] = y[0] - CELL_SIZE;
+                    y[0] = y[0] - CELL_SIZE; //Moves snake up.
                     break;
                 case 'D':
-                    y[0] = y[0] + CELL_SIZE;
+                    y[0] = y[0] + CELL_SIZE; //Moves snake down.
                     break;
                 case 'L':
-                    x[0] = x[0] - CELL_SIZE;
+                    x[0] = x[0] - CELL_SIZE; //Moves snake Left.
                     break;
                 case 'R':
-                    x[0] = x[0] + CELL_SIZE;
+                    x[0] = x[0] + CELL_SIZE; //Moves snake Right.
                     break;
             }
         }
 
         public void Food() {
             if ((x[0] == foodX) && (y[0] == foodY)) {
-                bodyParts++;
-                foodEaten++;
-                newFood();
+                bodyParts++;//Adds body part.
+                Score++; //Adds 1 point of score.
+                newFood(); //Spawns new food.
             }
         }
 
@@ -216,7 +271,7 @@ public class SnakeGame extends JFrame {
             }
             if (!running) {
                 timer.stop();
-            
+
             }
         }
 
@@ -242,32 +297,47 @@ public class SnakeGame extends JFrame {
                 // Allows you to change the direction of the snake but prevents you from turning directly back on yourself. 
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
+                    case KeyEvent.VK_A:
+
                         if (direction != 'R') {
                             direction = 'L';
+
                         }
                         break;
                     case KeyEvent.VK_RIGHT:
+                    case KeyEvent.VK_D:
+
                         if (direction != 'L') {
                             direction = 'R';
                         }
                         break;
                     case KeyEvent.VK_UP:
+                    case KeyEvent.VK_W:
+
                         if (direction != 'D') {
                             direction = 'U';
                         }
                         break;
                     case KeyEvent.VK_DOWN:
+                    case KeyEvent.VK_S:
+
                         if (direction != 'U') {
                             direction = 'D';
                         }
                         break;
+                    case KeyEvent.VK_P: // Press p to trigger pause Construstor.
+                        pauseGame();
+                        break;
+                    case KeyEvent.VK_R: //Press R to trigger the resume function.
+                        resumeGame();
+                        break;
+
                 }
             }
-        
+
         }
     }
 
 }
-
 
 
